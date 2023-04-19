@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DRiUv4.MainPage">
+
+    <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Text="Imię i Nazwisko:" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               WidthRequest="100" BackgroundColor="LimeGreen" />
+            <Picker x:Name="cb_Nazwisko" Grid.Row="0" Grid.Column="1" Unfocused="CB_Nazwisko_Unfocused"  />
+
+            <Label Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               Text="Forma Zgłoszenia:" BackgroundColor="Silver"/>
+            <Picker x:Name="cb_FormaZgloszenia" Grid.Row="1" Grid.Column="1"/>
+
+            <Label Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               Text="Kto:" BackgroundColor="SlateGray"/>
+            <Picker x:Name="cb_Kto" Grid.Row="2" Grid.Column="1"/>
+
+            <Label Grid.Row="3" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               Text="BU:" BackgroundColor="Silver"/>
+            <Picker x:Name="cb_BU" Grid.Row="3" Grid.Column="1"/>
+
+            <Label Grid.Row="4" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               Text="Aplikacja:" BackgroundColor="SlateGray" />
+            <Picker x:Name="cb_Aplikacja" Grid.Row="4" Grid.Column="1" SelectedIndexChanged="Cb_Aplikacja_SelectedIndexChanged"/>
+        </Grid>
+
+        <StackLayout Margin="0" BackgroundColor="Yellow">
+            <Label x:Name="lbl_Forma" FontSize="Medium" Text="Nazwa Zlecenia:" HorizontalTextAlignment="Center"/>
+            <Picker x:Name="cb_NazwaZlecenia"  SelectedIndexChanged="CB_NazwaZlecenia_SelectedIndexChanged"/>
+        </StackLayout>
+
+        <StackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btn_Send" Text="Wyślij"
+                BackgroundColor="Silver" Pressed="SubmitButton_Pressed" Grid.Row="0" Grid.Column="0"/>
+                <Label x:Name="ResultLabel" IsVisible="true" Grid.Row="1" Grid.Column="0"/>
+            </Grid>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>
+
