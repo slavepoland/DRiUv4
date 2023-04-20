@@ -1,17 +1,15 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xamarin.Forms;
-using System.Reflection;
 using System;
 using System.Linq;
-using Xamarin.Forms.Internals;
+using Xamarin.Essentials;
 
 namespace DRiUv4
 {
     public partial class MainPage : ContentPage
     {
-        private readonly string version = "1.0";
-        private readonly static string _macAdress;
+        private readonly string version = "1.1";
+        private readonly string url = "https://drive.google.com/file/d/1HYDR41Hjp6ZujC3ZS6nbOvQb992ff3Wo/view?usp=share_link";
 
         public Dictionary<string, int> DynamiclistApp = new Dictionary<string, int>()
         {
@@ -29,20 +27,22 @@ namespace DRiUv4
             { "11", 17 }
         };
 
-
         public MainPage()
         {
             InitializeComponent();
 
-            //_macAdress = MacAdress.GetMacAdress();
-
             if (Send.CheckVersion() != version)
             {
-                btn_Send.IsEnabled = false; btn_Send.Text = "Pobierz aktualną wersję!!!!";
+                Btn_Send.IsEnabled = false; 
+                Btn_Send.Text = "Pobierz aktualną wersję!!!!";
+                //LinkLabel linkLabel = new LinkLabel(new Uri(url));
+                //ResultLabel.Focus();
+                //ResultLabel.Text = linkLabel.ToString();
+                Btn_Hyper.IsVisible = true; Btn_Send.IsVisible = false;
             }
             else
             {//uruchomienie apliakcji
-                btn_Send.IsVisible = false;
+                Btn_Send.IsVisible = false;
                 Picker_Change(cb_Nazwisko, GoogleList.GetListsItem(1));//add item to combo
                 Picker_Change(cb_FormaZgloszenia, GoogleList.GetListsItem(2));//add item to combo
                 Picker_Change(cb_Kto, GoogleList.GetListsItem(3));//add item to combo
@@ -51,33 +51,31 @@ namespace DRiUv4
                 Picker_Change(cb_NazwaZlecenia, GoogleList.GetListsItem(6)); //add item to combo      
 
                 ////get last user
-                LastUser();
-                cb_Aplikacja.SelectedIndex = 0;
+                LastUser("open");
             }
         }
 
-        private void SubmitButton_Pressed(System.Object sender, System.EventArgs e)
+        //metody
+        private void SubmitButton_Pressed(object sender, EventArgs e)
         {
-            DateTime start = DateTime.Now;
-            btn_Send.IsEnabled = false;
+            //DateTime start = DateTime.Now;
+            Btn_Send.IsEnabled = false;
             Send send = new Send(); //clasa do wysyłki danych
-
             send.SendData(cb_Nazwisko.SelectedItem.ToString() ?? "null",
                           cb_FormaZgloszenia.SelectedItem.ToString() ?? "null",
                           cb_Kto.SelectedItem.ToString() ?? "null",
                           cb_BU.SelectedItem.ToString() ?? "null",
                           cb_Aplikacja.SelectedItem.ToString() ?? "null",
                           cb_NazwaZlecenia.SelectedItem.ToString() ?? "null",
-                          _macAdress ?? "null"
+                          macadress: DeviceId.Id ?? "null"
                           ); //append data to file
 
             cb_NazwaZlecenia.SelectedIndex = 0;
-            btn_Send.IsEnabled = true;
-            DateTime stop = DateTime.Now;
-            ResultLabel.Text = (stop - start).Milliseconds.ToString();
+            Btn_Send.IsEnabled = true;
+            //DateTime stop = DateTime.Now;
+            //ResultLabel.Text = (stop - start).Milliseconds.ToString();
         }
 
-        //metody
         private void Picker_Change(System.Object sender, List<string> list)
         {
             Picker cb = (Picker)sender;
@@ -95,10 +93,11 @@ namespace DRiUv4
                 cb.SelectedIndex = 0;
         } //update picker list
 
-        private void Cb_Aplikacja_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void Cb_Aplikacja_SelectedIndexChanged(object sender, EventArgs e)
         {
             Picker cb = (Picker)sender;
-            int i = DynamiclistApp.Where(k => k.Key == cb.SelectedIndex.ToString()).Select(k => k.Value).FirstOrDefault();
+            int i = DynamiclistApp.Where(k => k.Key == cb.SelectedIndex
+                .ToString()).Select(k => k.Value).FirstOrDefault();
             Picker_Change(cb_NazwaZlecenia, GoogleList.GetListsItem(i));
         }
 
@@ -108,40 +107,51 @@ namespace DRiUv4
             if (cb.Items.Count > 0)
             {
                 if (cb.SelectedItem.ToString() != ".")
-                    btn_Send.IsVisible = true;
+                    Btn_Send.IsVisible = true;
                 else
-                    btn_Send.IsVisible = false;
+                    Btn_Send.IsVisible = false;
             }
         }
 
-        private void LastUser()
+        private void LastUser(string action)
         {
-            string kto;
-            //var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MainPage)).Assembly;//
-            //Stream stream = assembly.GetManifestResourceStream("DRiUv2.who.txt");
-            //StreamReader sr = new StreamReader(stream);
-            try
-            {
-                kto = Send.CheckWho();
-                foreach (var item in GoogleList.GetListsItem(1))
-                {
-                    if (item.Equals(kto))
-                    {
-                        cb_Nazwisko.SelectedItem = item;
-                    }
-                }
-            }
-            catch
-            {
-                //System.IO.File.Create(folder);
-            }
+            bool WhoNotExist = false;
+            DeviceId.GetDeviceId();
 
+                if(action.Equals("open"))
+                {
+                    Dictionary<string, string> kto = Send.CheckWho();
+                            if (kto.ContainsKey(DeviceId.Id))
+                            {
+                                cb_Nazwisko.SelectedItem = kto.Where(x => x.Key == DeviceId.Id)
+                                .Select(x => x.Value).FirstOrDefault();
+                                WhoNotExist = true;
+                            }
+
+                    if(WhoNotExist == false)
+                        Send.SendWho(cb_Nazwisko.SelectedItem.ToString(), DeviceId.Id);
+                }
         }//while open get last user, while closed write last user
 
         private void CB_Nazwisko_Unfocused(object sender, FocusEventArgs e)
         {
-            Picker cb = (Picker)sender;
-            Send.SendWho(cb.SelectedItem.ToString());
+            try
+            {
+                Picker cb = (Picker)sender;
+                Send.SendWho(cb.SelectedItem.ToString(), DeviceId.Id);
+            }
+            catch { } 
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            //ResultLabel.Focus();
+            await Browser.OpenAsync(new Uri(url), BrowserLaunchMode.SystemPreferred);
+        }
+
+        private async void Btn_Hyper_Pressed(object sender, EventArgs e)
+        {
+            await Browser.OpenAsync(new Uri(url), BrowserLaunchMode.SystemPreferred);
         }
     }
 }

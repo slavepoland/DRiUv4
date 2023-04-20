@@ -51,13 +51,34 @@ namespace DRiUv4
             });
         }
 
-        public static List<string> GetListsItem(int listColumn)
+        public static List<string> GetListsItem(int firstColumn)
         {
-            if (listColumn == 0)
+            if (firstColumn == 0)
                 return null;
             if (SheetsService == null)
                 GoogleSheetsConnect();
-            var range = $"{_SheetName}!R2C{listColumn}:R100C{listColumn}";
+            var range = $"{_SheetName}!R2C{firstColumn}:R100C{firstColumn}";
+
+            var appendRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
+
+            appendRequest.MajorDimension = SpreadsheetsResource.ValuesResource.GetRequest.MajorDimensionEnum.COLUMNS;
+
+            var response = appendRequest.Execute();
+            List<string> strings = new List<string>();
+            foreach (var items in response.Values[0])
+            {
+                strings.Add(items.ToString());
+            }
+            return strings;
+        }
+
+        public static List<string> GetListsItem(int firstColumn, int lastColumn)
+        {
+            if (firstColumn == 0)
+                return null;
+            if (SheetsService == null)
+                GoogleSheetsConnect();
+            var range = $"{_SheetName}!R2C{firstColumn}:R100C{lastColumn}";
 
             var appendRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
 

@@ -11,6 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="HyperLinkLabel.cs" />
+    <Compile Remove="MyLists.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="dazzling-spirit-383513-0f9dd5bb5d8c.json" />
   </ItemGroup>
 

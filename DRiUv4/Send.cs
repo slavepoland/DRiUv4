@@ -7,6 +7,8 @@ using System.IO;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Services;
 using System.Reflection;
+using System.Linq;
+using Xamarin.Forms.Internals;
 
 namespace DRiUv4
 {
@@ -94,35 +96,71 @@ namespace DRiUv4
 
             return response.Values[0][0].ToString() ?? "null";
         }
-        public static string CheckWho()
+
+        public static Dictionary<string, string> CheckWho()
         {
             if (SheetsService == null)
                 GoogleSheetsConnect();
-            var range = "who!A1:A1";
+            var range = "who!A:B";
+
             var appendRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = appendRequest.Execute();
 
-            return response.Values[0][0].ToString() ?? "null";
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            for (int i = 0;  i < response.Values.Count; i++)
+            {
+                keyValuePairs.Add(response.Values[i][1].ToString(), response.Values[i][0].ToString());
+            }
+            return keyValuePairs;
+            //return response.Values[0][0].ToString() ?? "null";
         }
 
-        public static void SendWho(string nazwisko)
+        public static void SendWho(string nazwisko, string deviceId)
         {
             if (SheetsService == null)
                 GoogleSheetsConnect();
 
-            var range = "who!A1:A1";
             ValueRange valueRange = new ValueRange();
-            var objectList = new List<object>()
+            var range = "who!A:B";
+            var objectListRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
+            var response = objectListRequest.Execute();
+
+            Dictionary<string, string> value = new Dictionary<string, string>();
+            for (int i = 0; i < response.Values.Count; i++)
             {
-                nazwisko
-            };
-            valueRange.Values = new List<IList<object>>() { objectList };
+                value.Add(response.Values[i][1].ToString(), response.Values[i][0].ToString());
+            }
 
-            var appendRequest = SheetsService.Spreadsheets.Values.Update(valueRange,
-                spreadsheetId, range);
-            appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                int RowNr = value.Keys.IndexOf(deviceId);
+            if (value.ContainsKey(deviceId))
+            {
+                ValueRange valueCell = new ValueRange();
+                var cellList = new List<object>()
+                {
+                    nazwisko
+                };
+                valueCell.Values = new List<IList<object>>() { cellList };
+                var updateRequest = SheetsService.Spreadsheets.Values.Update(valueCell,
+                    spreadsheetId, $"who!A{RowNr + 1}:A{RowNr + 1}");
+                updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
 
-            appendRequest.Execute();
+                updateRequest.Execute();
+                }
+            else
+            {
+                //append new name and DeviceId
+                ValueRange appendRange = new ValueRange();
+                var appendList = new List<object>()
+                {
+                    nazwisko, deviceId
+                };
+                appendRange.Values = new List<IList<object>>() { appendList };
+                var appendRequest = SheetsService.Spreadsheets.Values.Append(appendRange,
+                            spreadsheetId, range);
+                appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.RAW;
+
+                appendRequest.Execute();
+            }          
         }
     }
 }
