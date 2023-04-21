@@ -15,7 +15,6 @@ namespace DRiUv4
     public class Send
     {
         private static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
-        //private static readonly string creditential = "dazzling-spirit-383513-0f9dd5bb5d8c.json"; //uprawnienia do konta Google Sheets
         private static readonly string spreadsheetId = "1e9nHy4brmTT4UKLLMhD3QJyqM8W5OJp9Aq9jbadpGLM"; //id udostępnionego pliku
         public readonly string _SheetName = "driu";
         private static readonly string ApplicationName = "DRiU";
@@ -125,14 +124,14 @@ namespace DRiUv4
             var objectListRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = objectListRequest.Execute();
 
-            Dictionary<string, string> value = new Dictionary<string, string>();
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
             for (int i = 0; i < response.Values.Count; i++)
             {
-                value.Add(response.Values[i][1].ToString(), response.Values[i][0].ToString());
+                keyValuePairs.Add(response.Values[i][1].ToString(), response.Values[i][0].ToString());
             }
 
-                int RowNr = value.Keys.IndexOf(deviceId);
-            if (value.ContainsKey(deviceId))
+                int RowNr = keyValuePairs.Keys.IndexOf(deviceId);
+            if (keyValuePairs.ContainsKey(deviceId))
             {
                 ValueRange valueCell = new ValueRange();
                 var cellList = new List<object>()

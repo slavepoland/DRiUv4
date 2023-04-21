@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DRiUv4.MainPage"
-             >
+             x:Class="DRiUv4.MainPage" >
 
-    <ContentPage.Content>
-        <StackLayout>
+<ContentPage.Content>
+    <StackLayout>
         <StackLayout>
             <Grid>
                 <Grid.RowDefinitions>
@@ -15,8 +14,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Zgłoszenia DRiU" Grid.Row="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"
-                   BackgroundColor="SlateGray" TextColor="White" FontAttributes="Bold"
-             />
+                   BackgroundColor="SlateGray" TextColor="White" FontAttributes="Bold" />
             </Grid>
         </StackLayout>
         <Grid>
@@ -32,29 +30,29 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Imię i Nazwisko:" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-               WidthRequest="100" BackgroundColor="LimeGreen" FontAttributes="Bold"/>
-            <Picker x:Name="cb_Nazwisko" Grid.Row="0" Grid.Column="1" Unfocused="CB_Nazwisko_Unfocused"  />
+             <Label Text="Imię i Nazwisko:" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                  WidthRequest="100" FontAttributes="Bold" FontSize="Body" BackgroundColor="LimeGreen"/>
+             <Picker x:Name="cb_Nazwisko" Grid.Row="0" Grid.Column="1" Unfocused="CB_Nazwisko_Unfocused" />
 
-            <Label Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-               Text="Forma Zgłoszenia:" BackgroundColor="Silver" FontAttributes="Bold"/>
+             <Label Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               Text="Forma Zgłoszenia:" BackgroundColor="Silver" FontAttributes="Bold" FontSize="Body"/>
             <Picker x:Name="cb_FormaZgloszenia" Grid.Row="1" Grid.Column="1"/>
 
             <Label Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-               Text="Kto:" BackgroundColor="SlateGray" FontAttributes="Bold"/>
+               Text="Kto:" BackgroundColor="SlateGray" FontAttributes="Bold" FontSize="Body"/>
             <Picker x:Name="cb_Kto" Grid.Row="2" Grid.Column="1"/>
 
             <Label Grid.Row="3" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-               Text="BU:" BackgroundColor="Silver" FontAttributes="Bold"/>
+               Text="BU:" BackgroundColor="Silver" FontAttributes="Bold" FontSize="Body"/>
             <Picker x:Name="cb_BU" Grid.Row="3" Grid.Column="1"/>
 
             <Label Grid.Row="4" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-               Text="Aplikacja:" BackgroundColor="SlateGray" FontAttributes="Bold"/>
+               Text="Aplikacja:" BackgroundColor="SlateGray" FontAttributes="Bold" FontSize="Body"/>
             <Picker x:Name="cb_Aplikacja" Grid.Row="4" Grid.Column="1" SelectedIndexChanged="Cb_Aplikacja_SelectedIndexChanged"/>
         </Grid>
 
         <StackLayout Margin="0" BackgroundColor="Yellow">
-                <Label x:Name="lbl_Forma" FontSize="Medium" Text="Nazwa Zlecenia:" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+                <Label x:Name="lbl_Forma" FontSize="Large" Text="Nazwa Zlecenia:" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
                 <Picker x:Name="cb_NazwaZlecenia"  SelectedIndexChanged="CB_NazwaZlecenia_SelectedIndexChanged" />
         </StackLayout>
 
@@ -73,18 +71,18 @@
 
                     <Label x:Name="ResultLabel" IsVisible="false" Grid.Row="2" Grid.Column="0" TextColor="Blue" FontAttributes="Bold"
                         HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" BackgroundColor="HotPink">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
                         Tapped="TapGestureRecognizer_Tapped"
                         NumberOfTapsRequired="1" />
-                    </Label.GestureRecognizers>
-                </Label>
-                <Button x:Name="Btn_Hyper" Text="Pobierz aktualną wersję" TextColor="Blue" IsVisible="false" FontAttributes="Bold"
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Button x:Name="Btn_Hyper" Text="Pobierz aktualną wersję" TextColor="Blue" IsVisible="false" FontAttributes="Bold"
                     BackgroundColor="Yellow" Pressed="Btn_Hyper_Pressed"  Grid.Row="1" Grid.Column="0"/>
                 </Grid>
         </StackLayout>
     </StackLayout>
-    </ContentPage.Content>
+</ContentPage.Content>
 
 </ContentPage>
 

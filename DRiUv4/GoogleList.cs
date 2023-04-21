@@ -57,7 +57,7 @@ namespace DRiUv4
                 return null;
             if (SheetsService == null)
                 GoogleSheetsConnect();
-            var range = $"{_SheetName}!R2C{firstColumn}:R100C{firstColumn}";
+            var range = $"{_SheetName}!R2C{firstColumn}:R200C{firstColumn}";
 
             var appendRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
 
@@ -78,7 +78,7 @@ namespace DRiUv4
                 return null;
             if (SheetsService == null)
                 GoogleSheetsConnect();
-            var range = $"{_SheetName}!R2C{firstColumn}:R100C{lastColumn}";
+            var range = $"{_SheetName}!R2C{firstColumn}:R200C{lastColumn}";
 
             var appendRequest = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
 

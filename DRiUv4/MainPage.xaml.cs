@@ -27,6 +27,19 @@ namespace DRiUv4
             { "11", 17 }
         };
 
+        private double width = 0;
+        private double height = 0;
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height); //must be called
+            if (this.width != width || this.height != height)
+            {
+                this.width = width;
+                this.height = height;
+                //reconfigure layout
+            }
+        }
         public MainPage()
         {
             InitializeComponent();
@@ -76,7 +89,7 @@ namespace DRiUv4
             //ResultLabel.Text = (stop - start).Milliseconds.ToString();
         }
 
-        private void Picker_Change(System.Object sender, List<string> list)
+        private void Picker_Change(object sender, List<string> list)
         {
             Picker cb = (Picker)sender;
             if (cb.Items.Count > 0)
